@@ -1,0 +1,19 @@
+{
+  "name": "GitHub Issue Title Loader",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "permissions": [
+    "tabs",
+    "https://github.com/"
+  ],
+  "background": {
+    "scripts": ["jquery-2.1.1.min.js","background.js"],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["jquery-2.1.1.min.js", "content.js"]
+    }
+  ]
+}
