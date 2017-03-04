@@ -1,20 +1,31 @@
-$('a').each(function(index) {
-  var a_tag = this;
-  if(!$(this).attr("href").match(/https:\/\/github\.com\/.*\/(pull|issues)\/[0-9]*/)) {
-    return;
-  }
-  
-  var href_eq_title = $(this).text() == $(this).attr("href")
-  var short_title   = /.*#[0-9]+$/.test($(this).text())
+const skipUrls = []
+const titles = {}
 
-  if(!(href_eq_title || short_title)) {
-    return;
-  }
-  
-  var port = chrome.extension.connect();
-  port.postMessage({'url' : $(this).attr("href")});
-  port.onMessage.addListener(function(msg) {
-    $(a_tag).text(msg.title);
-  });
-});
+let lock = false
 
+document.addEventListener('DOMNodeInserted', () => {
+  if(lock == true) { return }
+  lock = true
+
+  Array.from(document.getElementsByTagName('a'), el => {
+    if(!el.href.match(/https:\/\/github\.com\/.*\/(pull|issues)\/[0-9]*/)) { return }
+    if(el.text == el.href)                                                 { return }
+
+    if(titles[el.href] && el.text != titles[el.href]) {
+     el.text = titles[el.href]
+     return
+    }
+
+    if(skipUrls.indexOf(el.href) >= 0) { return }
+    skipUrls.push(el.href)
+
+    const port = chrome.extension.connect()
+    port.postMessage({'url' : el.href})
+    port.onMessage.addListener(function(msg) {
+      el.text = msg.title
+      titles[el.href] = msg.title
+    })
+  })
+
+  lock = false
+})
