@@ -9,10 +9,10 @@ document.addEventListener('DOMNodeInserted', () => {
 
   Array.from(document.getElementsByTagName('a'), el => {
     if(!el.href.match(/https:\/\/github\.com\/.*\/(pull|issues)\/[0-9]*/)) { return }
-    if(el.text == el.href)                                                 { return }
+    if(el.textContent == el.href)                                                 { return }
 
-    if(titles[el.href] && el.text != titles[el.href]) {
-     el.text = titles[el.href]
+    if(titles[el.href] && el.textContent != titles[el.href]) {
+     el.textContent = titles[el.href]
      return
     }
 
@@ -22,7 +22,7 @@ document.addEventListener('DOMNodeInserted', () => {
     const port = chrome.extension.connect()
     port.postMessage({'url' : el.href})
     port.onMessage.addListener(function(msg) {
-      el.text = msg.title
+      el.textContent = msg.title
       titles[el.href] = msg.title
     })
   })
