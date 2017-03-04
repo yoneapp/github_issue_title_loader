@@ -7,7 +7,7 @@
     "https://github.com/"
   ],
   "background": {
-    "scripts": ["jquery-2.1.1.min.js","background.js"],
+    "scripts": ["background.js"],
     "persistent": true
   },
   "content_scripts": [
@@ -17,7 +17,7 @@
         "https://*.qiita.com/*",
         "http://qiita.com/*"
       ],
-      "js": ["jquery-2.1.1.min.js", "content.js"]
+      "js": ["content.js"]
     }
   ]
 }
