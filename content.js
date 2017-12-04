@@ -3,7 +3,7 @@ const titles = {}
 
 let lock = false
 
-document.addEventListener('DOMNodeInserted', () => {
+const update = () => {
   if(lock == true) { return }
   lock = true
 
@@ -30,4 +30,10 @@ document.addEventListener('DOMNodeInserted', () => {
   })
 
   lock = false
+}
+
+update()
+
+document.addEventListener('DOMNodeInserted', () => {
+  update()
 })
